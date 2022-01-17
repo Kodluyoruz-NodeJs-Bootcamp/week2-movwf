@@ -1,8 +1,9 @@
+import { RequestHandler } from "express";
 import { hash, compare } from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user";
 
-const signJWT = (dataObj) =>
+const signJWT = (dataObj: Object) =>
   jwt.sign(
     {
       exp: Math.floor(Date.now() / 1000) + 2 * 60 * 60,
@@ -11,7 +12,7 @@ const signJWT = (dataObj) =>
     process.env.JWT_TOKEN_SECRET
   );
 
-export const validateJWT = (req, res, next) => {
+export const validateJWT: RequestHandler = (req, res, next) => {
   const bearerHeader = req.headers.authorization;
 
   if (bearerHeader) {
@@ -22,7 +23,7 @@ export const validateJWT = (req, res, next) => {
         return res.sendStatus(403);
       }
 
-      req.user = user;
+      req.session.user = user;
       next();
     });
   } else {
@@ -30,7 +31,7 @@ export const validateJWT = (req, res, next) => {
   }
 };
 
-export const login_user = async (req, res) => {
+export const login_user: RequestHandler = async (req, res) => {
   const { email, password } = req.body;
   const browser = req.headers["user-agent"];
 
@@ -63,7 +64,7 @@ export const login_user = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
+export const logout: RequestHandler = async (req, res) => {
   req.session.destroy((err) => {
     if (err)
       res.send({ result: "Error", message: "User cannot be logged out!" });
@@ -74,7 +75,7 @@ export const logout = async (req, res) => {
   });
 };
 
-export const register_user = async (req, res) => {
+export const register_user: RequestHandler = async (req, res) => {
   const { name, email, password, avatar } = req.body;
   const hashedPassword = await hash(password, 10);
 
@@ -96,12 +97,12 @@ export const register_user = async (req, res) => {
   }
 };
 
-export const check_jwt = async (req, res) => {
-  res.send(req.user);
+export const check_jwt: RequestHandler = async (req, res) => {
+  res.send(req.session.user);
 };
 
-export const check_browser = async (req, res) => {
-  const { data } = req.user;
+export const check_browser: RequestHandler = async (req, res) => {
+  const { data } = req.session.user;
   const browser = req.headers["user-agent"];
 
   if (data.browser === browser) {

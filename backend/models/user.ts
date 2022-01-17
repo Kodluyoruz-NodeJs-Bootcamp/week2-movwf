@@ -1,4 +1,8 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, {
+  ErrorHandlingMiddlewareFunction,
+  PostMiddlewareFunction,
+  Schema,
+} from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -10,9 +14,11 @@ const userSchema = new Schema(
   { emitIndexErrors: true }
 );
 
-const handleE11000 = (error, res, next) => {
-  if (error.code === 11000) {
-    const errorFields = Object.keys(error.keyPattern);
+type ErrorHandler = (err: any, res: any, next: (err?: any) => void) => void;
+
+const handleE11000: ErrorHandler = (err, res, next) => {
+  if (err.code === 11000) {
+    const errorFields = Object.keys(err.keyPattern);
 
     next(`Duplicate key error: ${errorFields}`);
   } else {

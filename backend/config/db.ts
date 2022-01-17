@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { logError, logSuccess } from "./logColors";
 
-const connect = async () => {
+const connect = async (): Promise<void> => {
   try {
     await mongoose.connect(process.env.DB_URL);
 

@@ -1,7 +1,8 @@
+import { RequestHandler } from "express";
 import { hash, compare } from "bcrypt";
 import User from "../models/user";
 
-export const login_user = async (req, res) => {
+export const login_user: RequestHandler = async (req, res) => {
   const { email, password } = req.body;
   const browser = req.headers["user-agent"];
 
@@ -35,7 +36,7 @@ export const login_user = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
+export const logout: RequestHandler = async (req, res) => {
   req.session.destroy((err) => {
     if (err)
       res.send({ result: "Error", message: "User cannot be logged out!" });
@@ -46,7 +47,7 @@ export const logout = async (req, res) => {
   });
 };
 
-export const register_user = async (req, res) => {
+export const register_user: RequestHandler = async (req, res) => {
   const { name, email, password, avatar } = req.body;
   const hashedPassword = await hash(password, 10);
 
@@ -73,12 +74,12 @@ export const register_user = async (req, res) => {
   }
 };
 
-export const check_session = async (req, res) => {
+export const check_session: RequestHandler = async (req, res) => {
   if (req.session) res.send({ result: "OK", session: req.session });
   else res.send({ result: "Error", message: "Session doesn't exists." });
 };
 
-export const check_browser = async (req, res) => {
+export const check_browser: RequestHandler = async (req, res) => {
   const { browser } = req.session.user;
   const browserHeader = req.headers["user-agent"];
 

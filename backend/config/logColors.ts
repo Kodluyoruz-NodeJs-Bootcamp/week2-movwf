@@ -24,15 +24,15 @@ const BgMagenta = "\x1b[45m";
 const BgCyan = "\x1b[46m";
 const BgWhite = "\x1b[47m";
 
-export const logSuccess = (...text) => {
+export const logSuccess = (...text: any) => {
   console.log(BgGreen, FgBlack, ...text, Reset);
 };
 
-export const logError = (...text) => {
+export const logError = (...text: any) => {
   console.log(BgRed, FgBlack, ...text, Reset);
 };
 
-export const logInfo = (...text) => {
+export const logInfo = (...text: any) => {
   console.log(BgYellow, FgBlack, ...text, Reset);
 };
 

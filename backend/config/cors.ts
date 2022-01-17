@@ -1,5 +1,7 @@
-const cors = function (req, res, next) {
-  res.header("Access-Control-Allow-Credentials", true);
+import { RequestHandler } from "express";
+
+const cors: RequestHandler = (req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Origin", req.headers.origin);
   res.header(
     "Access-Control-Allow-Methods",
